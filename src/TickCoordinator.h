@@ -22,17 +22,20 @@ class TickCoordinator
 {
     public:
     TickCoordinator();
+    ~TickCoordinator();
 
     /***
      * Add a reader to the collection
      * @param in the reader
      */
     void AddTickReader(std::shared_ptr<TickReader> in);
+    void RemoveTickReader(std::shared_ptr<TickReader> in);
 
     /****
      * @param in the tick handler
      */
     void AddTickHandler(std::shared_ptr<TickHandler> in);
+    void RemoveTickHandler(std::shared_ptr<TickHandler> in);
 
     /***
      * @brief progress 1 tick

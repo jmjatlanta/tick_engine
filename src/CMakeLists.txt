@@ -7,6 +7,7 @@ project ( tick )
 add_library( tick 
     TickReader.cpp
     TickWriter.cpp
+    TickCoordinator.cpp
 )
 
 target_include_directories(tick PRIVATE 
