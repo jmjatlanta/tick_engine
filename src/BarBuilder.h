@@ -5,6 +5,7 @@
 #include <string_view>
 #include <string>
 #include <unordered_map>
+#include "TickCoordinator.h"
 
 enum class BarDuration
 {
@@ -31,6 +32,7 @@ class Bar
     float low;
     float close;
     uint32_t volume;
+    uint64_t time; // time in nanoseconds
 };
 
 class BarHandler
@@ -43,10 +45,10 @@ public:
  * A simplistic bar builder. It listens for ticks, and builds bars, firing events when a bar
  * is updated
  */
-class BarBuilder
+class BarBuilder : public TickHandler
 {
     public:
-    BarBuilder(const std::string_view contract);
+    BarBuilder(TickCoordinator* coordinator);
 
     /***
     * Add a new listener
@@ -61,7 +63,17 @@ class BarBuilder
     */
     void AddDuration(const std::string_view contract, BarDuration duration);
 
+    // implementation of TickHandler interface
+    virtual void OnTick(std::string_view contract, const Tick& tick) override;
+
     protected:
+    struct DurationAndBar
+    {
+        BarDuration duration;
+        Bar bar;
+    };
     std::vector<std::shared_ptr<BarHandler>> handlers; // all receive all messages
-    std::unordered_map<std::string, std::vector<Bar>> latestBars; // contract to collection of bars, 1 per durration
+    std::unordered_map<std::string, std::vector<DurationAndBar>> latestBars; // contract to collection of bars, 1 per durration
+    TickCoordinator* tickCoordinator;
 };
+

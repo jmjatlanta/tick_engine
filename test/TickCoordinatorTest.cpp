@@ -72,18 +72,18 @@ TEST(TickCoordinatorTest, basics)
             std::string lastContract;
             Tick lastTick;
         };
-        std::shared_ptr<MyTickHandler> myTickHandler = std::make_shared<MyTickHandler>();
-        coordinator.AddTickHandler(myTickHandler); 
+        MyTickHandler myTickHandler;
+        coordinator.AddTickHandler(&myTickHandler); 
 
         coordinator.step();
-        EXPECT_EQ(myTickHandler->lastContract, "123456789");
-        EXPECT_EQ(myTickHandler->lastTick.price, 10.01f);
+        EXPECT_EQ(myTickHandler.lastContract, "123456789");
+        EXPECT_EQ(myTickHandler.lastTick.price, 10.01f);
         coordinator.step();
-        EXPECT_EQ(myTickHandler->lastContract, "987654321");
-        EXPECT_EQ(myTickHandler->lastTick.price, 10.02f);
+        EXPECT_EQ(myTickHandler.lastContract, "987654321");
+        EXPECT_EQ(myTickHandler.lastTick.price, 10.02f);
         coordinator.RemoveTickReader(reader1);
         coordinator.RemoveTickReader(reader2);
-        coordinator.RemoveTickHandler(myTickHandler);
+        coordinator.RemoveTickHandler(&myTickHandler);
     }
 
     if (std::filesystem::exists("test1.out"))
