@@ -11,3 +11,10 @@ include:
 NOTE: capturing ticks from brokers/exchanges is a necessary part, but not part of this library. The goal
 is to keep it broker/exchange agnostic.
 
+Dependencies:
+- C++20 for filesystem and chrono, C++17 may work, untested
+- CMake for building
+- Google GTest was used for tests (see `test` directory)
+- Built on Ubuntu and sometimes MacOS, but should be platform agnostic. Adjustment of CMake files may be necessary for other
+platforms.
+
