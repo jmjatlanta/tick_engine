@@ -15,6 +15,7 @@ add_executable( tick_engine_tests
     TickReaderTest.cpp
     TickWriterTest.cpp
     TickCoordinatorTest.cpp
+    BarBuilderTest.cpp
 )
 
 target_include_directories(tick_engine_tests PRIVATE 

@@ -39,8 +39,9 @@ class TickCoordinator
 
     /***
      * @brief progress 1 tick
+     * @returns true on success
      */
-    void step();
+    bool step();
 
     protected:
     std::vector<std::shared_ptr<TickReader>> readers;

@@ -7,15 +7,15 @@ BarBuilder::BarBuilder(TickCoordinator* coordinator)
     tickCoordinator->AddTickHandler(this);
 }
 
-void BarBuilder::AddHandler(std::shared_ptr<BarHandler> in)
+void BarBuilder::AddHandler(BarHandler* in)
 {
     handlers.push_back(in);
 }
 
-void BarBuilder::RemoveHandler(std::shared_ptr<BarHandler> in)
+void BarBuilder::RemoveHandler(BarHandler* in)
 {
-    auto itr = std::find_if(handlers.begin(), handlers.end(), [in](std::shared_ptr<BarHandler> curr)
-            { return curr.get() == in.get(); });
+    auto itr = std::find_if(handlers.begin(), handlers.end(), [in](BarHandler* curr)
+            { return curr == in; });
     if (itr != handlers.end())
         handlers.erase(itr);
 }
@@ -135,7 +135,7 @@ void BarBuilder::OnTick(std::string_view contract, const Tick& tick)
                 if (somethingChanged)
                 {
                     std::for_each(handlers.begin(), handlers.end(), 
-                            [db, contract](std::shared_ptr<BarHandler> curr)
+                            [db, contract](BarHandler* curr)
                             { curr->OnBar(contract, db.duration, db.bar); });
                 }
             });

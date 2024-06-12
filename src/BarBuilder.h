@@ -54,8 +54,9 @@ class BarBuilder : public TickHandler
     * Add a new listener
     * @param in the listener
     */
-    void AddHandler(std::shared_ptr<BarHandler> in);
-    void RemoveHandler(std::shared_ptr<BarHandler> in);
+    void AddHandler(BarHandler* in);
+    void RemoveHandler(BarHandler* in);
+
     /****
     * Start sending bars of a particular contract/duration
     * @param contract the contract
@@ -72,7 +73,8 @@ class BarBuilder : public TickHandler
         BarDuration duration;
         Bar bar;
     };
-    std::vector<std::shared_ptr<BarHandler>> handlers; // all receive all messages
+
+    std::vector<BarHandler*> handlers; // all receive all messages
     std::unordered_map<std::string, std::vector<DurationAndBar>> latestBars; // contract to collection of bars, 1 per durration
     TickCoordinator* tickCoordinator;
 };
