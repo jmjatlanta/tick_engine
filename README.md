@@ -1,4 +1,4 @@
-## A tick generator
+## A ticker plant and OHLC bar generator
 
 These are some basic tools primarily built to backtest strategies. The idea is to read historical tick 
 files and generate events that mimic what would be received from an exchange or a brokerage. The tools
@@ -24,3 +24,4 @@ with such values, it would probably be better to use chrono soon after reading f
 manipulation by the layers above easier.
 - There is a mix of shared_ptr and raw pointer for subscribing/unsubscribing. This should be standardized. Raw
 pointer is best in this case IMO.
+- tick_engine is a poor choice. It is more of a ticker plant / bar plant.
