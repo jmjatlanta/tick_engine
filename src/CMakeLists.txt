@@ -8,6 +8,7 @@ add_library( tick
     TickReader.cpp
     TickWriter.cpp
     TickCoordinator.cpp
+    BarBuilder.cpp
 )
 
 target_include_directories(tick PRIVATE 

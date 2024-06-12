@@ -34,17 +34,18 @@ class TickCoordinator
     /****
      * @param in the tick handler
      */
-    void AddTickHandler(std::shared_ptr<TickHandler> in);
-    void RemoveTickHandler(std::shared_ptr<TickHandler> in);
+    void AddTickHandler(TickHandler* in);
+    void RemoveTickHandler(TickHandler* in);
 
     /***
      * @brief progress 1 tick
+     * @returns true on success
      */
-    void step();
+    bool step();
 
     protected:
     std::vector<std::shared_ptr<TickReader>> readers;
-    std::vector<std::shared_ptr<TickHandler>> tickHandlers;
+    std::vector<TickHandler*> tickHandlers;
     std::unordered_map<std::shared_ptr<TickReader>, Tick> latestTicks;
 };
 

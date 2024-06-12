@@ -40,15 +40,15 @@ void TickCoordinator::RemoveTickReader(std::shared_ptr<TickReader> in)
         }
     }
 }
-void TickCoordinator::AddTickHandler(std::shared_ptr<TickHandler> in)
+void TickCoordinator::AddTickHandler(TickHandler* in)
 {
     tickHandlers.push_back(in);
 }
-void TickCoordinator::RemoveTickHandler(std::shared_ptr<TickHandler> in)
+void TickCoordinator::RemoveTickHandler(TickHandler* in)
 {
     for(auto itr = tickHandlers.begin(); itr != tickHandlers.end(); ++itr)
     {
-        if (in.get() == (*itr).get())
+        if (in == (*itr))
         {
             tickHandlers.erase(itr);
             break;
@@ -74,8 +74,11 @@ std::pair<std::shared_ptr<TickReader>, Tick> getLatest(std::unordered_map<std::s
     return std::pair<std::shared_ptr<TickReader>, Tick>(oldestReader, oldestTick);
 }
 
-void TickCoordinator::step()
+bool TickCoordinator::step()
 {
+    if (latestTicks.size() == 0)
+        return false;
+
     // get the next step
     std::pair<std::shared_ptr<TickReader>, Tick> latestPair = getLatest(latestTicks);
     Tick t = latestPair.second;
@@ -99,6 +102,8 @@ void TickCoordinator::step()
     }
     // notify the handlers
     std::string contract = latestPair.first->header().contract;
-    std::for_each(tickHandlers.begin(), tickHandlers.end(), [t, contract](std::shared_ptr<TickHandler> curr)
+    std::for_each(tickHandlers.begin(), tickHandlers.end(), [t, contract](TickHandler* curr)
             { curr->OnTick(contract, t); });
+    return true;
 }
+
