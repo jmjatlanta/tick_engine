@@ -1,6 +1,9 @@
 #include "BarBuilder.h"
 #include <algorithm>
 
+namespace tick_engine
+{
+
 BarBuilder::BarBuilder(TickCoordinator* coordinator)
     : tickCoordinator(coordinator)
 {
@@ -140,3 +143,5 @@ void BarBuilder::OnTick(std::string_view contract, const Tick& tick)
                 }
             });
 }
+
+} // namespace tick_engine

@@ -6,6 +6,8 @@
  * These are the low-level structs for reading/writing Tick data to/from the disk
  */
 
+namespace tick_engine
+{
 
 #pragma pack(1)
 /***
@@ -34,5 +36,8 @@ class TickHeader
 };
 #pragma pack(8)
 
-std::string to_string(const Tick& in);
-std::string to_string(const TickHeader& in);
+} // namespace tick_engine
+
+std::string to_string(const tick_engine::Tick& in);
+std::string to_string(const tick_engine::TickHeader& in);
+
