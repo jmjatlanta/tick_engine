@@ -1,5 +1,8 @@
 #include "TickReader.h"
 
+namespace tick_engine
+{
+
 TickReader::TickReader(std::ifstream& stream) : in_(stream)
 {
     // read the header
@@ -20,3 +23,4 @@ bool TickReader::eof()
 
 TickHeader TickReader::header() const { return header_; }
 
+} // namespace

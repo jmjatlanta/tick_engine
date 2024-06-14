@@ -7,6 +7,9 @@
 #include <unordered_map>
 #include "TickCoordinator.h"
 
+namespace tick_engine
+{
+
 enum class BarDuration
 {
     SEC_30,
@@ -79,3 +82,4 @@ class BarBuilder : public TickHandler
     TickCoordinator* tickCoordinator;
 };
 
+} // namespace tick_engine

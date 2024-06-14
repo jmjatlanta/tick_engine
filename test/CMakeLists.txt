@@ -23,7 +23,7 @@ target_include_directories(tick_engine_tests PRIVATE
 )
 
 target_link_libraries(tick_engine_tests 
-    tick
+    tick_engine
     GTest::gtest_main
 )
 

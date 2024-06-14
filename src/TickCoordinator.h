@@ -4,6 +4,8 @@
 #include <vector>
 #include "TickReader.h"
 
+namespace tick_engine
+{
 /***
  * Those that wish to receive ticks should implement this interface
  */
@@ -28,8 +30,8 @@ class TickCoordinator
      * Add a reader to the collection
      * @param in the reader
      */
-    void AddTickReader(std::shared_ptr<TickReader> in);
-    void RemoveTickReader(std::shared_ptr<TickReader> in);
+    void AddTickReader(TickReader* in);
+    void RemoveTickReader(TickReader* in);
 
     /****
      * @param in the tick handler
@@ -44,8 +46,9 @@ class TickCoordinator
     bool step();
 
     protected:
-    std::vector<std::shared_ptr<TickReader>> readers;
+    std::vector<TickReader*> readers;
     std::vector<TickHandler*> tickHandlers;
-    std::unordered_map<std::shared_ptr<TickReader>, Tick> latestTicks;
+    std::unordered_map<TickReader*, Tick> latestTicks;
 };
 
+} // namespace tick_engine

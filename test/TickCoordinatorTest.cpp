@@ -6,6 +6,8 @@
 #include "TickReader.h"
 #include "TickCoordinator.h"
 
+using namespace tick_engine;
+
 TEST(TickCoordinatorTest, basics)
 {
     if (std::filesystem::exists("test1.out"))
@@ -59,8 +61,8 @@ TEST(TickCoordinatorTest, basics)
         std::ifstream in2("test2.out", std::ios_base::binary);
         std::shared_ptr<TickReader> reader2 = std::make_shared<TickReader>(in2);
         TickCoordinator coordinator;
-        coordinator.AddTickReader(reader1);
-        coordinator.AddTickReader(reader2);
+        coordinator.AddTickReader(reader1.get());
+        coordinator.AddTickReader(reader2.get());
         class MyTickHandler : public TickHandler
         {
             public:
@@ -81,8 +83,8 @@ TEST(TickCoordinatorTest, basics)
         coordinator.step();
         EXPECT_EQ(myTickHandler.lastContract, "987654321");
         EXPECT_EQ(myTickHandler.lastTick.price, 10.02f);
-        coordinator.RemoveTickReader(reader1);
-        coordinator.RemoveTickReader(reader2);
+        coordinator.RemoveTickReader(reader1.get());
+        coordinator.RemoveTickReader(reader2.get());
         coordinator.RemoveTickHandler(&myTickHandler);
     }
 

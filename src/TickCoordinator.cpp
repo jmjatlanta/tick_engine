@@ -2,6 +2,9 @@
 #include <limits>
 #include "TickCoordinator.h"
 
+namespace tick_engine
+{
+
 TickCoordinator::TickCoordinator()
 {
 }
@@ -13,7 +16,7 @@ TickCoordinator::~TickCoordinator()
     tickHandlers.clear();
 }
 
-void TickCoordinator::AddTickReader(std::shared_ptr<TickReader> in)
+void TickCoordinator::AddTickReader(TickReader* in)
 {
     readers.push_back(in);
     if (!in->eof())
@@ -21,11 +24,11 @@ void TickCoordinator::AddTickReader(std::shared_ptr<TickReader> in)
         latestTicks[in] = in->next();
     }
 }
-void TickCoordinator::RemoveTickReader(std::shared_ptr<TickReader> in)
+void TickCoordinator::RemoveTickReader(TickReader* in)
 {
     for(auto itr = readers.begin(); itr != readers.end(); ++itr)
     {
-        if (in.get() == (*itr).get())
+        if (in == (*itr))
         {
             readers.erase(itr);
             break;
@@ -33,7 +36,7 @@ void TickCoordinator::RemoveTickReader(std::shared_ptr<TickReader> in)
     }
     for(auto itr = latestTicks.begin(); itr != latestTicks.end(); ++itr)
     {
-        if ( in.get() == (*itr).first.get())
+        if ( in == (*itr).first)
         {
             latestTicks.erase(itr);
             break;
@@ -56,31 +59,31 @@ void TickCoordinator::RemoveTickHandler(TickHandler* in)
     }
 }
 
-std::pair<std::shared_ptr<TickReader>, Tick> getLatest(std::unordered_map<std::shared_ptr<TickReader>, Tick>&readers)
+std::pair<TickReader*, Tick> getLatest(std::unordered_map<TickReader*, Tick>&readers)
 {
     // go through the readers, picking the oldest
-    std::shared_ptr<TickReader> oldestReader = nullptr;
+    TickReader* oldestReader = nullptr;
     Tick oldestTick;
     oldestTick.time = std::numeric_limits<uint64_t>::max();
     std::for_each(readers.begin(), readers.end(), 
-                  [&oldestTick, &oldestReader]( std::pair<const std::shared_ptr<TickReader>, Tick>& curr)
+                  [&oldestTick, &oldestReader](const std::pair<TickReader*, Tick>& curr)
             { 
                 if ( curr.second.time < oldestTick.time)
                 {
                     oldestReader = curr.first;
                     oldestTick = curr.second;
                 }
-                });
-    return std::pair<std::shared_ptr<TickReader>, Tick>(oldestReader, oldestTick);
+            });
+    return std::pair<TickReader*, Tick>(oldestReader, oldestTick);
 }
 
 bool TickCoordinator::step()
 {
-    if (latestTicks.size() == 0)
+   if (latestTicks.size() == 0)
         return false;
 
     // get the next step
-    std::pair<std::shared_ptr<TickReader>, Tick> latestPair = getLatest(latestTicks);
+    std::pair<TickReader*, Tick> latestPair = getLatest(latestTicks);
     Tick t = latestPair.second;
     // advance the collection
     if (latestPair.first->eof())
@@ -88,7 +91,7 @@ bool TickCoordinator::step()
         // remove from latestPair
         for(auto itr = latestTicks.begin(); itr != latestTicks.end(); ++itr)
         {
-            if (latestPair.first.get() == (*itr).first.get())
+            if (latestPair.first == (*itr).first)
             {
                 latestTicks.erase(itr);
                 break;
@@ -106,4 +109,6 @@ bool TickCoordinator::step()
             { curr->OnTick(contract, t); });
     return true;
 }
+
+} // namespace tick_builder
 

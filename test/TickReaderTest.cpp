@@ -4,5 +4,5 @@
 TEST(TickReaderTest, basic)
 {
     std::ifstream input("test.tick");
-    TickReader reader(input);
+    tick_engine::TickReader reader(input);
 }

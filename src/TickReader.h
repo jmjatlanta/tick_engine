@@ -7,6 +7,9 @@
  * Read tick files
  */
 
+namespace tick_engine
+{
+
 class TickReader
 {
     public:
@@ -30,3 +33,5 @@ class TickReader
     std::ifstream& in_;
     TickHeader header_;
 };
+
+} // namespace tick_engine

@@ -5,6 +5,8 @@
 #include "TickWriter.h"
 #include "TickReader.h"
 
+using namespace tick_engine;
+
 TEST(TickWriterTest, basics)
 {
     if (std::filesystem::exists("test.out"))

@@ -4,6 +4,8 @@
 #include "TickCoordinator.h"
 #include "TickWriter.h"
 
+using namespace tick_engine;
+
 void buildTickFile(std::string_view filename)
 {
     std::ofstream outFile(filename.data(), std::ios_base::binary);
@@ -14,7 +16,7 @@ void buildTickFile(std::string_view filename)
     TickWriter writer(outFile, header);
     uint64_t currTime = header.startTime;
 
-    Tick tick;
+    tick_engine::Tick tick;
     tick.type = 'T';
     tick.time = currTime * 1000000000;
     uint8_t factor = 1;
@@ -76,7 +78,7 @@ TEST(BarBuilderTest, basics)
     std::ifstream ticks("ticks.out", std::ios_base::binary);
     std::shared_ptr<TickReader> tickReader = std::make_shared<TickReader>( ticks );
     TickCoordinator coordinator;
-    coordinator.AddTickReader( tickReader );
+    coordinator.AddTickReader( tickReader.get() );
 
     BarBuilder barBuilder(&coordinator); // NOTE: it registers itself as a handler
     MyBarHandler barHandler;

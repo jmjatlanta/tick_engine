@@ -2,6 +2,9 @@
 #include <fstream>
 #include "Tick.h"
 
+namespace tick_engine
+{
+
 class TickWriter
 {
     public:
@@ -12,4 +15,6 @@ class TickWriter
     protected:
     std::ofstream& out_;
 };
+
+} // namespace tick_engine
 
